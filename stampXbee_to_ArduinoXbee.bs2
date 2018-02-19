@@ -1,0 +1,118 @@
+' ********************************************************
+' Simple_Debug.bs2
+' Sends data to Remote terminal for monitoring
+' ********************************************************
+' {$STAMP BS2}
+' {$PBASIC 2.5}
+' *************** Constants & PIN Declarations ***********
+#SELECT $STAMP
+#CASE BS2, BS2E, BS2PE
+T9600 CON 84
+#CASE BS2SX, BS2P
+T9600 CON 240
+#CASE BS2PX
+T9600 CON 396
+#ENDSELECT
+Baud CON T9600
+Rx PIN 15 ' XBee DOUT - Not used in this example
+Tx PIN 14 ' XBee DIN
+RTS PIN 11 ' XBee RTS - Not used in this example
+' ************** Variable Declarations ******************
+Counter VAR Byte
+' ************** Main LOOP ******************************
+PAUSE 500 ' 1/2 second pause to stabilize comms
+'SEROUT Tx, Baud, [CLS,"Program Running...",CR]
+'PAUSE 2000 ' Pause before counting
+'FOR Counter = 1 TO 20 ' Count and display remotely
+
+CmConstant CON 2260
+InConstant CON 890
+cmDistance VAR Word
+inDistance VAR Word
+time VAR Word
+DO
+PULSOUT 13, 5
+PULSIN 13, 1, time
+Counter = cmConstant ** time
+inDistance = inConstant ** time
+DEBUG HOME, DEC3 Counter, " cm"
+DEBUG CR, DEC3 inDistance, " in"
+'PAUSE 100
+'LOOP
+
+IF (Counter > 9) THEN
+
+  IF (Counter > 10) THEN
+
+    IF (Counter > 11) THEN
+
+      IF (Counter > 12) THEN
+
+        IF (Counter > 13) THEN
+
+          IF (Counter > 14) THEN
+
+             IF (Counter > 15) THEN
+
+                IF (Counter > 16) THEN
+
+                   IF (Counter > 17) THEN
+
+                      IF (Counter > 18) THEN
+
+                         IF (Counter > 19) THEN
+
+                            IF (Counter > 20) THEN
+                            SEROUT Tx, Baud, ["L", CR]
+                            ELSE
+                            SEROUT Tx, Baud, ["K", CR]
+                            ENDIF
+
+                         ELSE
+                         SEROUT Tx, Baud, ["J", CR]
+                         ENDIF
+
+                      ELSE
+                      SEROUT Tx, Baud, ["I", CR]
+                      ENDIF
+
+                   ELSE
+                   SEROUT Tx, Baud, ["H", CR]
+                   ENDIF
+
+                ELSE
+                SEROUT Tx, Baud, ["G", CR]
+                ENDIF
+
+             ELSE
+             SEROUT Tx, Baud, ["F", CR]
+             ENDIF
+
+          ELSE
+          SEROUT Tx, Baud, ["E", CR]
+          ENDIF
+
+        ELSE
+        SEROUT Tx, Baud, ["D", CR]
+        ENDIF
+
+      ELSE
+      SEROUT Tx, Baud, ["C", CR]
+      ENDIF
+
+    ELSE
+    SEROUT Tx, Baud, ["B", CR]
+    ENDIF
+
+  ELSE
+  SEROUT Tx, Baud, ["A", CR]
+  ENDIF
+
+ELSE
+SEROUT Tx, Baud, [DEC Counter, CR]
+ENDIF
+
+PAUSE 100
+LOOP
+'SEROUT Tx, Baud, ["Loop complete.",CR]
+'END
